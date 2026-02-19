@@ -3,64 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Konu Seçim Paneli - 2026</title>
+    <title>Sunum Ödevi Konuları</title>
     <style>
-        :root { --primary: #2563eb; --success: #059669; --warning: #d97706; --error: #dc2626; --bg: #f8fafc; }
+        :root { --primary: #2563eb; --success: #059669; --warning: #d97706; --error: #dc2626; --bg: #f1f5f9; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg); color: #1e293b; padding: 10px; line-height: 1.5; }
-        .container { max-width: 800px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .container { max-width: 850px; margin: 0 auto; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
         
-        h1 { text-align: center; color: var(--primary); margin-bottom: 5px; }
-        .deadline { text-align: center; color: var(--error); font-weight: bold; font-size: 1.1rem; margin-bottom: 20px; text-transform: uppercase; border: 2px solid var(--error); padding: 5px; border-radius: 8px; display: inline-block; width: 100%; box-sizing: border-box; }
-        
-        /* Uyarı Kutusu */
-        .instruction-box { background: #fffbeb; border: 1px solid #fef3c7; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid var(--warning); }
-        .instruction-box ul { margin: 5px 0 0 20px; padding: 0; color: #92400e; }
+        h1 { text-align: center; color: var(--primary); margin-bottom: 10px; font-size: 1.8rem; }
+
+        /* Geri Sayım Sayacı Tasarımı */
+        .countdown-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .countdown-item { background: #1e293b; color: white; padding: 10px; border-radius: 8px; min-width: 60px; text-align: center; }
+        .countdown-value { font-size: 1.2rem; font-weight: bold; display: block; }
+        .countdown-label { font-size: 0.7rem; text-transform: uppercase; color: #94a3b8; }
+        .deadline-text { text-align: center; color: var(--error); font-weight: bold; margin-bottom: 15px; font-size: 0.9rem; }
+
+        .instruction-box { background: #fffbeb; border-left: 5px solid var(--warning); padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; }
         .instruction-box b { color: #92400e; }
 
-        .login-box { background: #eff6ff; padding: 25px; border-radius: 10px; text-align: center; margin-bottom: 20px; border: 2px dashed #bfdbfe; }
-        input[type="text"] { padding: 12px; width: 80%; max-width: 300px; border: 2px solid #cbd5e1; border-radius: 8px; margin-bottom: 15px; font-size: 16px; }
-        button { padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.3s; width: 80%; max-width: 300px; }
+        .login-box { background: #f8fafc; padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 20px; border: 2px dashed #cbd5e1; }
+        input[type="text"] { padding: 12px; width: 85%; max-width: 320px; border: 2px solid #e2e8f0; border-radius: 8px; margin-bottom: 15px; font-size: 16px; }
+        button { padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; width: 85%; max-width: 320px; }
         button:hover { background: #1d4ed8; }
 
         .topic-grid { display: grid; gap: 12px; }
-        .topic-card { padding: 16px; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; transition: 0.2s; }
-        .topic-card.available { cursor: pointer; border-left: 6px solid var(--success); }
-        .topic-card.available:hover { background: #f0fdf4; transform: scale(1.01); }
-        .topic-card.locked { background: #f1f5f9; border-left: 6px solid #94a3b8; color: #64748b; cursor: not-allowed; }
+        .topic-card { padding: 16px; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; display: flex; flex-direction: column; }
+        .topic-card.available { cursor: pointer; border-left: 6px solid var(--success); transition: 0.3s; }
+        .topic-card.available:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .topic-card.locked { background: #f8fafc; border-left: 6px solid #94a3b8; color: #64748b; cursor: not-allowed; }
         
-        .status { font-size: 0.8rem; font-weight: bold; padding: 4px 10px; border-radius: 6px; display: inline-block; margin-top: 8px; }
+        .status { font-size: 0.8rem; font-weight: bold; padding: 5px 12px; border-radius: 20px; align-self: flex-start; margin-top: 10px; }
         .status-free { background: #dcfce7; color: #166534; }
         .status-taken { background: #fee2e2; color: #991b1b; }
         
         .hidden { display: none; }
-        .user-info { text-align: center; font-weight: bold; color: var(--success); margin-bottom: 20px; padding: 10px; background: #f0fdf4; border-radius: 8px; }
+        .user-info { text-align: center; font-weight: bold; color: var(--success); margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>📝 Dönem Ödevi Konu Seçimi</h1>
+    <h1>Sunum Ödevi Konuları</h1>
     
-    <div class="deadline">📅 Son Seçim Tarihi: 26.02.2026 - 23:59</div>
+    <div class="deadline-text">⏳ Seçimler İçin Kalan Süre:</div>
+    <div class="countdown-container" id="countdown">
+        <div class="countdown-item"><span class="countdown-value" id="days">00</span><span class="countdown-label">Gün</span></div>
+        <div class="countdown-item"><span class="countdown-value" id="hours">00</span><span class="countdown-label">Saat</span></div>
+        <div class="countdown-item"><span class="countdown-value" id="minutes">00</span><span class="countdown-label">Dak</span></div>
+        <div class="countdown-item"><span class="countdown-value" id="seconds">00</span><span class="countdown-label">Sn</span></div>
+    </div>
 
     <div class="instruction-box">
-        <b>⚠️ ÖNEMLİ KURALLAR:</b>
-        <ul>
-            <li>Bir konuyu seçtiğinizde seçiminiz <b>SİSTEME KİLİTLENİR.</b></li>
-            <li>Seçim yapıldıktan sonra <b>DEĞİŞTİRİLEMEZ</b> veya iptal edilemez.</li>
-            <li>Lütfen listeyi sonuna kadar incelemeden karar vermeyiniz.</li>
-            <li>Her öğrencinin yalnızca <b>BİR (1)</b> konu seçme hakkı vardır.</li>
-        </ul>
+        <b>⚠️ BİLGİLENDİRME:</b>
+        <p style="margin: 5px 0;">Lütfen tüm konuları incelemeden seçim yapmayınız. Seçilen konu sisteme adınıza kilitlenir ve <b>DEĞİŞTİRİLEMEZ.</b></p>
     </div>
 
     <div id="loginArea" class="login-box">
         <input type="text" id="studentName" placeholder="Adınızı ve Soyadınızı Yazınız...">
         <br>
-        <button onclick="login()">Sisteme Giriş Yap</button>
+        <button onclick="login()">Konuları Listele</button>
     </div>
 
     <div id="selectionArea" class="hidden">
-        <div class="user-info">Sayın <span id="userName"></span>, lütfen konunuzu seçiniz:</div>
+        <div class="user-info">Hoş Geldin, <span id="userName"></span></div>
         <div id="topicList" class="topic-grid"></div>
     </div>
 </div>
@@ -83,6 +88,7 @@
     const db = getDatabase(app);
     let currentUser = "";
     let hasSelected = false;
+    let isExpired = false;
 
     const topics = [
         "Çocuk gelişimiyle ilgili dijital bilgi kaynaklarına erişim ve bu bilgilerin bilimsel doğruluğunu değerlendirme yöntemleri",
@@ -119,14 +125,36 @@
         "Çocuk eğitimi için geliştirilen açık kaynaklı yazılımlar ve eğitici içeriklerin özgürce paylaşılması kültürü"
     ];
 
+    // Geri Sayım Mantığı
+    const targetDate = new Date("Feb 26, 2026 23:59:59").getTime();
+    const countdownInterval = setInterval(() => {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        const d = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("days").innerText = d < 10 ? "0" + d : d;
+        document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
+        document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
+        document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
+
+        if (distance < 0) {
+            clearInterval(countdownInterval);
+            isExpired = true;
+            document.getElementById("countdown").innerHTML = "<b style='color:red'>SEÇİM SÜRESİ DOLMUŞTUR</b>";
+        }
+    }, 1000);
+
     window.login = function() {
         const val = document.getElementById('studentName').value.trim();
-        if(val.length < 3) { alert("Lütfen geçerli bir Ad Soyad giriniz."); return; }
+        if(val.length < 3) { alert("Lütfen Ad Soyad giriniz."); return; }
         currentUser = val;
         document.getElementById('loginArea').classList.add('hidden');
         document.getElementById('selectionArea').classList.remove('hidden');
         document.getElementById('userName').innerText = currentUser;
-        window.scrollTo(0,0);
     };
 
     onValue(ref(db, 'secimler'), (snapshot) => {
@@ -144,9 +172,9 @@
             card.className = `topic-card ${takenBy ? 'locked' : 'available'}`;
             card.innerHTML = `<div><b>${index + 1}.</b> ${topic}</div>
                 <div class="status ${takenBy ? 'status-taken' : 'status-free'}">
-                ${takenBy ? '🔴 Seçen: ' + takenBy : '🟢 Müsait (Seçilebilir)'}</div>`;
+                ${takenBy ? '🔴 Seçen: ' + takenBy : '🟢 Müsait'}</div>`;
             
-            if(!takenBy && !hasSelected) {
+            if(!takenBy && !hasSelected && !isExpired) {
                 card.onclick = () => selectTopic(index);
             }
             container.appendChild(card);
@@ -154,13 +182,10 @@
     }
 
     function selectTopic(id) {
-        const msg = `DİKKAT: "${topics[id]}" konusunu seçmek üzeresiniz.\n\nBu işlem GERİ ALINAMAZ ve seçiminiz değiştirilemez. Onaylıyor musunuz?`;
-        if(confirm(msg)) {
+        if(confirm(`"${topics[id]}" konusunu seçmek üzeresiniz. Bu seçim geri alınamaz. Onaylıyor musunuz?`)) {
             const updates = {};
             updates[id] = currentUser;
-            update(ref(db, 'secimler'), updates)
-            .then(() => alert("Seçiminiz başarıyla kaydedildi! Başarılar dileriz."))
-            .catch(() => alert("Bir hata oluştu. Lütfen tekrar deneyin."));
+            update(ref(db, 'secimler'), updates);
         }
     }
 </script>

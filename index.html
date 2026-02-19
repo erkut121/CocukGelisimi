@@ -11,25 +11,25 @@
         
         h1 { text-align: center; color: var(--primary); margin-bottom: 10px; font-size: 1.8rem; }
 
-        /* Geri Sayım Sayacı Tasarımı */
+        /* Geri Sayım Sayacı */
         .countdown-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
         .countdown-item { background: #1e293b; color: white; padding: 10px; border-radius: 8px; min-width: 60px; text-align: center; }
         .countdown-value { font-size: 1.2rem; font-weight: bold; display: block; }
         .countdown-label { font-size: 0.7rem; text-transform: uppercase; color: #94a3b8; }
-        .deadline-text { text-align: center; color: var(--error); font-weight: bold; margin-bottom: 15px; font-size: 0.9rem; }
+        .deadline-text { text-align: center; color: var(--error); font-weight: bold; margin-bottom: 10px; font-size: 0.9rem; }
 
-        .instruction-box { background: #fffbeb; border-left: 5px solid var(--warning); padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; }
-        .instruction-box b { color: #92400e; }
+        /* Uyarı Kutusu - Burası Kaybolan Kısım */
+        .instruction-box { background: #fffbeb; border-left: 5px solid var(--warning); padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; border-right: 1px solid #fef3c7; border-top: 1px solid #fef3c7; border-bottom: 1px solid #fef3c7; }
+        .instruction-box b { color: #92400e; font-size: 1rem; display: block; margin-bottom: 5px; }
+        .instruction-box p { margin: 0; color: #92400e; font-weight: 500; }
 
         .login-box { background: #f8fafc; padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 20px; border: 2px dashed #cbd5e1; }
         input[type="text"] { padding: 12px; width: 85%; max-width: 320px; border: 2px solid #e2e8f0; border-radius: 8px; margin-bottom: 15px; font-size: 16px; }
         button { padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; width: 85%; max-width: 320px; }
-        button:hover { background: #1d4ed8; }
-
+        
         .topic-grid { display: grid; gap: 12px; }
         .topic-card { padding: 16px; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; display: flex; flex-direction: column; }
         .topic-card.available { cursor: pointer; border-left: 6px solid var(--success); transition: 0.3s; }
-        .topic-card.available:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .topic-card.locked { background: #f8fafc; border-left: 6px solid #94a3b8; color: #64748b; cursor: not-allowed; }
         
         .status { font-size: 0.8rem; font-weight: bold; padding: 5px 12px; border-radius: 20px; align-self: flex-start; margin-top: 10px; }
@@ -37,7 +37,7 @@
         .status-taken { background: #fee2e2; color: #991b1b; }
         
         .hidden { display: none; }
-        .user-info { text-align: center; font-weight: bold; color: var(--success); margin-bottom: 15px; }
+        .user-info { text-align: center; font-weight: bold; color: var(--success); margin-bottom: 15px; padding: 10px; border-radius: 8px; background: #f0fdf4; }
     </style>
 </head>
 <body>
@@ -54,18 +54,18 @@
     </div>
 
     <div class="instruction-box">
-        <b>⚠️ BİLGİLENDİRME:</b>
-        <p style="margin: 5px 0;">Lütfen tüm konuları incelemeden seçim yapmayınız. Seçilen konu sisteme adınıza kilitlenir ve <b>DEĞİŞTİRİLEMEZ.</b></p>
+        <b>⚠️ ÇOK ÖNEMLİ UYARI:</b>
+        <p>Seçtiğiniz konu anında adınıza kaydedilir. Bu işlemden sonra seçimini <u>DEĞİŞTİREMEZSİNİZ</u>. Lütfen listeyi dikkatlice inceleyip karar verin.</p>
     </div>
 
     <div id="loginArea" class="login-box">
         <input type="text" id="studentName" placeholder="Adınızı ve Soyadınızı Yazınız...">
         <br>
-        <button onclick="login()">Konuları Listele</button>
+        <button onclick="login()">Sisteme Giriş Yap</button>
     </div>
 
     <div id="selectionArea" class="hidden">
-        <div class="user-info">Hoş Geldin, <span id="userName"></span></div>
+        <div class="user-info">Hoş Geldin, <span id="userName"></span>. Lütfen konunu seç:</div>
         <div id="topicList" class="topic-grid"></div>
     </div>
 </div>
@@ -88,7 +88,6 @@
     const db = getDatabase(app);
     let currentUser = "";
     let hasSelected = false;
-    let isExpired = false;
 
     const topics = [
         "Çocuk gelişimiyle ilgili dijital bilgi kaynaklarına erişim ve bu bilgilerin bilimsel doğruluğunu değerlendirme yöntemleri",
@@ -127,25 +126,17 @@
 
     // Geri Sayım Mantığı
     const targetDate = new Date("Feb 26, 2026 23:59:59").getTime();
-    const countdownInterval = setInterval(() => {
+    setInterval(() => {
         const now = new Date().getTime();
         const distance = targetDate - now;
-
-        const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const s = Math.floor((distance % (1000 * 60)) / 1000);
-
-        document.getElementById("days").innerText = d < 10 ? "0" + d : d;
-        document.getElementById("hours").innerText = h < 10 ? "0" + h : h;
-        document.getElementById("minutes").innerText = m < 10 ? "0" + m : m;
-        document.getElementById("seconds").innerText = s < 10 ? "0" + s : s;
-
         if (distance < 0) {
-            clearInterval(countdownInterval);
-            isExpired = true;
-            document.getElementById("countdown").innerHTML = "<b style='color:red'>SEÇİM SÜRESİ DOLMUŞTUR</b>";
+            document.getElementById("countdown").innerHTML = "<b style='color:red'>SÜRE DOLDU</b>";
+            return;
         }
+        document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
+        document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
     }, 1000);
 
     window.login = function() {
@@ -173,16 +164,13 @@
             card.innerHTML = `<div><b>${index + 1}.</b> ${topic}</div>
                 <div class="status ${takenBy ? 'status-taken' : 'status-free'}">
                 ${takenBy ? '🔴 Seçen: ' + takenBy : '🟢 Müsait'}</div>`;
-            
-            if(!takenBy && !hasSelected && !isExpired) {
-                card.onclick = () => selectTopic(index);
-            }
+            if(!takenBy && !hasSelected) card.onclick = () => selectTopic(index);
             container.appendChild(card);
         });
     }
 
     function selectTopic(id) {
-        if(confirm(`"${topics[id]}" konusunu seçmek üzeresiniz. Bu seçim geri alınamaz. Onaylıyor musunuz?`)) {
+        if(confirm(`"${topics[id]}" konusunu seçiyorsunuz. Değiştirilemez! Onaylıyor musunuz?`)) {
             const updates = {};
             updates[id] = currentUser;
             update(ref(db, 'secimler'), updates);

@@ -5,39 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sunum Ödevi Konuları</title>
     <style>
-        :root { --primary: #2563eb; --success: #059669; --warning: #d97706; --error: #dc2626; --bg: #f1f5f9; }
+        :root { --primary: #2563eb; --success: #059669; --warning: #d97706; --error: #dc2626; --bg: #f8fafc; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg); color: #1e293b; padding: 10px; line-height: 1.5; }
         .container { max-width: 850px; margin: 0 auto; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
         
-        h1 { text-align: center; color: var(--primary); margin-bottom: 10px; font-size: 1.8rem; }
+        h1 { text-align: center; color: var(--primary); margin-bottom: 5px; font-size: 1.8rem; }
 
         /* Geri Sayım Sayacı */
-        .countdown-container { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
-        .countdown-item { background: #1e293b; color: white; padding: 10px; border-radius: 8px; min-width: 60px; text-align: center; }
-        .countdown-value { font-size: 1.2rem; font-weight: bold; display: block; }
-        .countdown-label { font-size: 0.7rem; text-transform: uppercase; color: #94a3b8; }
+        .countdown-container { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; }
+        .countdown-item { background: #1e293b; color: white; padding: 8px; border-radius: 8px; min-width: 55px; text-align: center; }
+        .countdown-value { font-size: 1.1rem; font-weight: bold; display: block; }
+        .countdown-label { font-size: 0.65rem; text-transform: uppercase; color: #94a3b8; }
         .deadline-text { text-align: center; color: var(--error); font-weight: bold; margin-bottom: 10px; font-size: 0.9rem; }
 
-        /* Uyarı Kutusu - Burası Kaybolan Kısım */
-        .instruction-box { background: #fffbeb; border-left: 5px solid var(--warning); padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 0.9rem; border-right: 1px solid #fef3c7; border-top: 1px solid #fef3c7; border-bottom: 1px solid #fef3c7; }
-        .instruction-box b { color: #92400e; font-size: 1rem; display: block; margin-bottom: 5px; }
-        .instruction-box p { margin: 0; color: #92400e; font-weight: 500; }
+        /* İSTEDİĞİN 4 MADDELİK UYARI KUTUSU */
+        .rules-box { background: #fffbeb; border: 2px solid #fcd34d; padding: 15px; border-radius: 10px; margin-bottom: 25px; }
+        .rules-box h3 { margin-top: 0; color: #92400e; font-size: 1.1rem; text-align: center; border-bottom: 1px solid #fcd34d; padding-bottom: 5px; }
+        .rules-box ul { margin: 10px 0 0 0; padding-left: 20px; color: #92400e; font-weight: 500; }
+        .rules-box li { margin-bottom: 5px; }
 
-        .login-box { background: #f8fafc; padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 20px; border: 2px dashed #cbd5e1; }
-        input[type="text"] { padding: 12px; width: 85%; max-width: 320px; border: 2px solid #e2e8f0; border-radius: 8px; margin-bottom: 15px; font-size: 16px; }
-        button { padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; width: 85%; max-width: 320px; }
-        
+        .login-box { background: #eff6ff; padding: 25px; border-radius: 12px; text-align: center; margin-bottom: 20px; border: 2px dashed #bfdbfe; }
+        input[type="text"] { padding: 12px; width: 85%; max-width: 320px; border: 2px solid #cbd5e1; border-radius: 8px; margin-bottom: 15px; font-size: 16px; }
+        button { padding: 12px 24px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; width: 85%; max-width: 320px; transition: 0.3s; }
+        button:hover { background: #1d4ed8; transform: translateY(-2px); }
+
         .topic-grid { display: grid; gap: 12px; }
-        .topic-card { padding: 16px; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; display: flex; flex-direction: column; }
-        .topic-card.available { cursor: pointer; border-left: 6px solid var(--success); transition: 0.3s; }
-        .topic-card.locked { background: #f8fafc; border-left: 6px solid #94a3b8; color: #64748b; cursor: not-allowed; }
+        .topic-card { padding: 16px; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; display: flex; flex-direction: column; position: relative; }
+        .topic-card.available { cursor: pointer; border-left: 6px solid var(--success); transition: 0.2s; }
+        .topic-card.available:hover { transform: scale(1.01); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .topic-card.locked { background: #f1f5f9; border-left: 6px solid #94a3b8; color: #64748b; cursor: not-allowed; }
         
         .status { font-size: 0.8rem; font-weight: bold; padding: 5px 12px; border-radius: 20px; align-self: flex-start; margin-top: 10px; }
         .status-free { background: #dcfce7; color: #166534; }
         .status-taken { background: #fee2e2; color: #991b1b; }
         
         .hidden { display: none; }
-        .user-info { text-align: center; font-weight: bold; color: var(--success); margin-bottom: 15px; padding: 10px; border-radius: 8px; background: #f0fdf4; }
+        .user-info { text-align: center; font-weight: bold; color: var(--success); margin-bottom: 15px; background: #f0fdf4; padding: 10px; border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -45,7 +48,7 @@
 <div class="container">
     <h1>Sunum Ödevi Konuları</h1>
     
-    <div class="deadline-text">⏳ Seçimler İçin Kalan Süre:</div>
+    <div class="deadline-text">⌛ Seçimler İçin Kalan Süre:</div>
     <div class="countdown-container" id="countdown">
         <div class="countdown-item"><span class="countdown-value" id="days">00</span><span class="countdown-label">Gün</span></div>
         <div class="countdown-item"><span class="countdown-value" id="hours">00</span><span class="countdown-label">Saat</span></div>
@@ -53,19 +56,24 @@
         <div class="countdown-item"><span class="countdown-value" id="seconds">00</span><span class="countdown-label">Sn</span></div>
     </div>
 
-    <div class="instruction-box">
-        <b>⚠️ ÇOK ÖNEMLİ UYARI:</b>
-        <p>Seçtiğiniz konu anında adınıza kaydedilir. Bu işlemden sonra seçimini <u>DEĞİŞTİREMEZSİNİZ</u>. Lütfen listeyi dikkatlice inceleyip karar verin.</p>
+    <div class="rules-box">
+        <h3>⚠️ ÖNEMLİ KURALLAR</h3>
+        <ul>
+            <li>Bir konuyu seçtiğinizde seçiminiz <b>SİSTEME KİLİTLENİR.</b></li>
+            <li>Seçim yapıldıktan sonra <b>DEĞİŞTİRİLEMEZ</b> veya iptal edilemez.</li>
+            <li>Lütfen listeyi sonuna kadar incelemeden karar vermeyiniz.</li>
+            <li>Her öğrencinin yalnızca <b>BİR (1)</b> konu seçme hakkı vardır.</li>
+        </ul>
     </div>
 
     <div id="loginArea" class="login-box">
         <input type="text" id="studentName" placeholder="Adınızı ve Soyadınızı Yazınız...">
         <br>
-        <button onclick="login()">Sisteme Giriş Yap</button>
+        <button onclick="login()">Giriş Yap ve Listeyi Aç</button>
     </div>
 
     <div id="selectionArea" class="hidden">
-        <div class="user-info">Hoş Geldin, <span id="userName"></span>. Lütfen konunu seç:</div>
+        <div class="user-info">Giriş Yapıldı: <span id="userName"></span></div>
         <div id="topicList" class="topic-grid"></div>
     </div>
 </div>
@@ -119,24 +127,24 @@
         "Çocukluk dönemi paylaşımlarının ilerideki yetişkinlik hayatına etkisi ve dijital unutulma hakkı",
         "Çocuk hakları savunuculuğunda sosyal medyanın gücü ve toplumsal farkındalık yaratma kapasitesi",
         "Akıllı bebek odası teknolojileri ve nesnelerin internetinin çocuk bakımındaki kolaylıkları ile riskleri",
-        "Esnek dijital çalışma modellerinin ebeveynlik pratikleri ve çocukla geçirilen kaliteli zamana etkisi",
-        "İnternet reklamlarının çocuk psikolojisi üzerindeki etkileri ve bilinçsiz satın alma tercihlerine müdahalesi",
-        "Çocuk eğitimi için geliştirilen açık kaynaklı yazılımlar ve eğitici içeriklerin özgürce paylaşılması kültürü"
+        "Esnek dijital çalışma modellerinin ebeveynlik pratikleri ve ebeveynlik kalitesine etkisi",
+        "İnternet reklamlarının çocuk psikolojisi üzerindeki etkileri ve bilinçsiz satın alma tercihleri",
+        "Çocuk eğitimi için geliştirilen açık kaynaklı yazılımlar ve eğitici içeriklerin paylaşılması"
     ];
 
     // Geri Sayım Mantığı
     const targetDate = new Date("Feb 26, 2026 23:59:59").getTime();
     setInterval(() => {
         const now = new Date().getTime();
-        const distance = targetDate - now;
-        if (distance < 0) {
-            document.getElementById("countdown").innerHTML = "<b style='color:red'>SÜRE DOLDU</b>";
+        const dist = targetDate - now;
+        if (dist < 0) {
+            document.getElementById("countdown").innerHTML = "<b style='color:red'>SEÇİM SÜRESİ DOLDU</b>";
             return;
         }
-        document.getElementById("days").innerText = Math.floor(distance / (1000 * 60 * 60 * 24));
-        document.getElementById("hours").innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        document.getElementById("minutes").innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        document.getElementById("seconds").innerText = Math.floor((distance % (1000 * 60)) / 1000);
+        document.getElementById("days").innerText = Math.floor(dist / (1000 * 60 * 60 * 24));
+        document.getElementById("hours").innerText = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        document.getElementById("minutes").innerText = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById("seconds").innerText = Math.floor((dist % (1000 * 60)) / 1000);
     }, 1000);
 
     window.login = function() {
@@ -163,14 +171,14 @@
             card.className = `topic-card ${takenBy ? 'locked' : 'available'}`;
             card.innerHTML = `<div><b>${index + 1}.</b> ${topic}</div>
                 <div class="status ${takenBy ? 'status-taken' : 'status-free'}">
-                ${takenBy ? '🔴 Seçen: ' + takenBy : '🟢 Müsait'}</div>`;
+                ${takenBy ? '🔴 SEÇEN: ' + takenBy : '🟢 MÜSAİT'}</div>`;
             if(!takenBy && !hasSelected) card.onclick = () => selectTopic(index);
             container.appendChild(card);
         });
     }
 
     function selectTopic(id) {
-        if(confirm(`"${topics[id]}" konusunu seçiyorsunuz. Değiştirilemez! Onaylıyor musunuz?`)) {
+        if(confirm(`"${topics[id]}" konusunu seçiyorsunuz. Seçiminiz DEĞİŞTİRİLEMEZ. Onaylıyor musunuz?`)) {
             const updates = {};
             updates[id] = currentUser;
             update(ref(db, 'secimler'), updates);
